@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رحلة الطالب العلمية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1E2A38;
+    --ink-soft:#4A5568;
+    --paper:#F5F2E9;
+    --paper-raised:#FFFFFF;
+    --brass:#A6822E;
+    --brass-light:#EFE2C2;
+    --emerald:#3F6659;
+    --emerald-light:#DCE8E3;
+    --line:#DCD5C0;
+    --danger:#A5433A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Tajawal',sans-serif;
+    min-height:100vh;
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--paper);
+    padding-bottom:40px;
+  }
+  header.top{
+    padding:28px 20px 18px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  header.top h1{
+    font-family:'Amiri',serif;
+    font-size:26px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  header.top p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .tabs{
+    display:flex;
+    margin:16px 20px 0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .tabs button{
+    flex:1;
+    border:none;
+    background:transparent;
+    padding:11px 8px;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+    font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .tabs button.active{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  main{padding:18px 20px 0;}
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+  .card h2{
+    font-family:'Amiri',serif;
+    font-size:19px;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  select, input[type=text], input[type=number], input[type=password]{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+    background:#FBFAF6;
+    color:var(--ink);
+  }
+  label{
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .field{margin-bottom:12px;}
+  .btn{
+    display:inline-block;
+    border:none;
+    border-radius:8px;
+    padding:10px 16px;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-brass{background:var(--brass); color:#fff;}
+  .btn-outline{background:transparent; border:1px solid var(--ink); color:var(--ink);}
+  .btn-danger{background:transparent; color:var(--danger); border:1px solid var(--danger);}
+  .btn-block{width:100%;}
+  .row{display:flex; gap:8px;}
+  .row > *{flex:1;}
+
+  .stage-hero{
+    text-align:center;
+    padding:22px 16px 26px;
+  }
+  .stage-hero .eyebrow{
+    font-size:12px;
+    color:var(--brass);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .stage-hero .stage-name{
+    font-family:'Amiri',serif;
+    font-size:34px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 4px;
+  }
+  .stage-hero .total{
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .progress-wrap{
+    margin-top:16px;
+    text-align:right;
+  }
+  .progress-track{
+    background:var(--line);
+    height:10px;
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    background:linear-gradient(90deg, var(--emerald), var(--brass));
+    height:100%;
+    border-radius:6px;
+    transition:width .5s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  .ladder{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    padding:4px 4px;
+  }
+  .ladder-step{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    position:relative;
+    padding-bottom:22px;
+  }
+  .ladder-step:last-child{padding-bottom:0;}
+  .ladder-step .node{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:var(--paper-raised);
+    border:2px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    color:var(--ink-soft);
+    flex-shrink:0;
+    z-index:1;
+  }
+  .ladder-step.done .node{
+    background:var(--emerald);
+    border-color:var(--emerald);
+    color:#fff;
+  }
+  .ladder-step.current .node{
+    background:var(--brass);
+    border-color:var(--brass);
+    color:#fff;
+  }
+  .ladder-step .connector{
+    position:absolute;
+    top:26px;
+    right:13px;
+    width:2px;
+    height:calc(100% - 4px);
+    background:var(--line);
+  }
+  .ladder-step.done .connector{background:var(--emerald);}
+  .ladder-step .step-body{padding-top:2px;}
+  .ladder-step .step-name{
+    font-family:'Amiri',serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .ladder-step .step-need{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .ladder-step.current .step-name{color:var(--brass);}
+
+  .criterion-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .criterion-row:last-child{border-bottom:none;}
+  .criterion-row .val{
+    font-weight:700;
+    color:var(--emerald);
+  }
+
+  .stu-list{display:flex; flex-direction:column; gap:8px;}
+  .stu-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .stu-item.selected{border-color:var(--brass); background:var(--brass-light);}
+  .stu-item .stu-total{color:var(--ink-soft); font-size:13px;}
+
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13px;
+    padding:20px 10px;
+  }
+  .log-item{
+    font-size:12px;
+    color:var(--ink-soft);
+    padding:6px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .log-item:last-child{border-bottom:none;}
+  .toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--ink);
+    color:var(--paper);
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:13px;
+    z-index:50;
+    opacity:0;
+    transition:opacity .3s;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;}
+  .lock-icon{font-size:34px; text-align:center; margin-bottom:6px;}
+  .hint{font-size:12px; color:var(--ink-soft); margin-top:6px; text-align:center;}
+  .loading{text-align:center; padding:40px 10px; color:var(--ink-soft); font-size:14px;}
+  .config-warning{
+    background:#FCEEE9;
+    border:1px solid var(--danger);
+    color:var(--danger);
+    padding:14px;
+    border-radius:10px;
+    font-size:13px;
+    margin:16px 20px 0;
+    line-height:1.7;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1>رحلة الطالب العلمية</h1>
+    <p>من الابتدائي إلى الدكتوراه — خطوة بخطوة</p>
+  </header>
+
+  <div id="configWarning"></div>
+
+  <div class="tabs">
+    <button id="tabStudent" class="active">متابعة الطالب</button>
+    <button id="tabAdmin">لوحة المشرف</button>
+  </div>
+
+  <main id="main">
+    <div class="loading">جاري تحميل البيانات...</div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* ================================================================
+   ١) إعدادات Supabase — بيانات مشروعك (Student Journey Project)
+   ================================================================ */
+const supabaseUrl = "https://ckoumyjedwrrzavygxsn.supabase.co";
+const supabaseKey = "sb_publishable_iXqc-tTq8hNw5SDjp-qSDg_3TP70EmG";
+/* ================================================================ */
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const isConfigured = !(supabaseUrl.startsWith('PASTE_') || supabaseKey.startsWith('PASTE_'));
+let supabase = null;
+
+const STAGES = [
+  {name:'ابتدائي', threshold:0},
+  {name:'متوسط', threshold:100},
+  {name:'ثانوي', threshold:400},
+  {name:'جامعة', threshold:900},
+  {name:'ماجستير', threshold:1900},
+  {name:'دكتوراه', threshold:3900},
+];
+const CRITERIA = [
+  {key:'attendance', label:'حضور يوم الثلاثاء مبكرًا'},
+  {key:'weeklyRequest', label:'الطلب الأسبوعي'},
+  {key:'tuesdayWin', label:'الفوز في برنامج الثلاثاء'},
+  {key:'hospitality', label:'الضيافة'},
+  {key:'behavior', label:'السلوك'},
+];
+const DEFAULT_PIN = '0000';
+
+let students = [];
+let settings = {pin: DEFAULT_PIN};
+let selectedStudentStudentTab = null;
+let selectedStudentAdminTab = null;
+let isAdminUnlocked = false;
+
+const mainEl = document.getElementById('main');
+const toastEl = document.getElementById('toast');
+const configWarningEl = document.getElementById('configWarning');
+
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  setTimeout(()=> toastEl.classList.remove('show'), 2200);
+}
+
+function uid(){
+  return 'stu_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+}
+
+function totalOf(student){
+  return CRITERIA.reduce((sum,c)=> sum + (student.points[c.key]||0), 0);
+}
+
+function stageInfoFor(total){
+  let idx = 0;
+  for(let i=0;i<STAGES.length;i++){
+    if(total >= STAGES[i].threshold) idx = i;
+  }
+  const current = STAGES[idx];
+  const next = STAGES[idx+1] || null;
+  let progress = 1;
+  if(next){
+    progress = (total - current.threshold) / (next.threshold - current.threshold);
+  }
+  return {idx, current, next, progress: Math.max(0, Math.min(1, progress))};
+}
+
+async function loadData(){
+  if(!isConfigured) return;
+  try{
+    const { data, error } = await supabase
+      .from('student_journey')
+      .select('students, settings')
+      .eq('id', 1)
+      .single();
+    if(error) throw error;
+    students = (data && data.students) || [];
+    settings = (data && data.settings) || {pin: DEFAULT_PIN};
+  }catch(e){
+    console.error(e);
+    showToast('تعذر الاتصال بقاعدة البيانات');
+    students = [];
+    settings = {pin: DEFAULT_PIN};
+  }
+}
+
+async function saveAll(){
+  if(!isConfigured) return;
+  try{
+    const { error } = await supabase
+      .from('student_journey')
+      .update({ students, settings })
+      .eq('id', 1);
+    if(error) throw error;
+  }catch(e){
+    console.error(e);
+    showToast('تعذر الحفظ، تحقق من الاتصال بالإنترنت');
+  }
+}
+
+/* ---------- STUDENT VIEW ---------- */
+function renderStudentView(){
+  let html = '';
+  html += `<div class="card"><h2>اختر اسمك</h2>`;
+  if(students.length === 0){
+    html += `<div class="empty">لا يوجد طلاب مسجلون بعد. يرجى مراجعة المشرف.</div>`;
+  } else {
+    html += `<select id="studentSelect">`;
+    html += `<option value="">-- اختر الطالب --</option>`;
+    students.forEach(s=>{
+      const sel = (selectedStudentStudentTab === s.id) ? 'selected' : '';
+      html += `<option value="${s.id}" ${sel}>${escapeHtml(s.name)}</option>`;
+    });
+    html += `</select>`;
+  }
+  html += `</div>`;
+
+  const student = students.find(s=>s.id === selectedStudentStudentTab);
+  if(student){
+    const total = totalOf(student);
+    const info = stageInfoFor(total);
+    html += `<div class="card stage-hero">
+      <div class="eyebrow">المرحلة الحالية</div>
+      <div class="stage-name">${info.current.name}</div>
+      <div class="total">${escapeHtml(student.name)} · إجمالي النقاط: ${total}</div>`;
+    if(info.next){
+      const remaining = info.next.threshold - total;
+      html += `<div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" style="width:${(info.progress*100).toFixed(1)}%"></div></div>
+        <div class="progress-label">يحتاج ${remaining} نقطة إضافية للوصول إلى مرحلة "${info.next.name}"</div>
+      </div>`;
+    } else {
+      html += `<div class="progress-wrap"><div class="progress-label">🎓 وصل الطالب إلى أعلى مرحلة (الدكتوراه)</div></div>`;
+    }
+    html += `</div>`;
+
+    html += `<div class="card"><h2>سلّم المراحل</h2><div class="ladder">`;
+    STAGES.forEach((st,i)=>{
+      let cls = 'ladder-step';
+      if(i < info.idx) cls += ' done';
+      else if(i === info.idx) cls += ' current';
+      const isLast = i === STAGES.length - 1;
+      html += `<div class="${cls}">
+        ${!isLast ? '<div class="connector"></div>' : ''}
+        <div class="node">${i+1}</div>
+        <div class="step-body">
+          <div class="step-name">${st.name}</div>
+          <div class="step-need">${i===0 ? 'نقطة البداية' : 'يبدأ من ' + st.threshold + ' نقطة'}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+
+    html += `<div class="card"><h2>تفصيل النقاط</h2>`;
+    CRITERIA.forEach(c=>{
+      html += `<div class="criterion-row"><span>${c.label}</span><span class="val">${student.points[c.key]||0}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  mainEl.innerHTML = html;
+
+  const sel = document.getElementById('studentSelect');
+  if(sel){
+    sel.addEventListener('change', (e)=>{
+      selectedStudentStudentTab = e.target.value || null;
+      renderStudentView();
+    });
+  }
+}
+
+/* ---------- ADMIN VIEW ---------- */
+function renderAdminLock(){
+  mainEl.innerHTML = `
+    <div class="card">
+      <div class="lock-icon">🔒</div>
+      <h2 style="text-align:center">دخول المشرف</h2>
+      <div class="field">
+        <label>الرمز السري</label>
+        <input type="password" id="pinInput" placeholder="أدخل الرمز">
+      </div>
+      <button class="btn btn-primary btn-block" id="pinSubmit">دخول</button>
+      <div class="hint">الرمز الافتراضي: ${DEFAULT_PIN} (يمكن تغييره بعد الدخول)</div>
+    </div>`;
+  document.getElementById('pinSubmit').addEventListener('click', ()=>{
+    const val = document.getElementById('pinInput').value;
+    if(val === settings.pin){
+      isAdminUnlocked = true;
+      showToast('تم الدخول بنجاح');
+      renderAdminView();
+    } else {
+      showToast('الرمز غير صحيح');
+    }
+  });
+  document.getElementById('pinInput').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') document.getElementById('pinSubmit').click();
+  });
+}
+
+function renderAdminView(){
+  let html = '';
+
+  html += `<div class="card">
+    <h2>إضافة طالب جديد</h2>
+    <div class="row">
+      <input type="text" id="newStudentName" placeholder="اسم الطالب">
+      <button class="btn btn-brass" id="addStudentBtn" style="flex:0 0 auto;">إضافة</button>
+    </div>
+  </div>`;
+
+  html += `<div class="card">
+    <h2>قائمة الطلاب (${students.length})</h2>
+    <div class="stu-list" id="stuList">`;
+  if(students.length === 0){
+    html += `<div class="empty">لم يتم إضافة أي طالب بعد.</div>`;
+  } else {
+    students.forEach(s=>{
+      const total = totalOf(s);
+      const info = stageInfoFor(total);
+      const sel = s.id === selectedStudentAdminTab ? 'selected' : '';
+      html += `<div class="stu-item ${sel}" data-id="${s.id}">
+        <span>${escapeHtml(s.name)}</span>
+        <span class="stu-total">${info.current.name} · ${total} نقطة</span>
+      </div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  const student = students.find(s=>s.id === selectedStudentAdminTab);
+  if(student){
+    html += `<div class="card">
+      <h2>رصد النقاط — ${escapeHtml(student.name)}</h2>`;
+    CRITERIA.forEach(c=>{
+      html += `<div class="field">
+        <label>${c.label} (الحالي: ${student.points[c.key]||0})</label>
+        <div class="row">
+          <input type="number" id="delta_${c.key}" placeholder="أضف نقاط (مثال: 5 أو -2)">
+          <button class="btn btn-outline" data-crit="${c.key}" style="flex:0 0 auto;">إضافة</button>
+        </div>
+      </div>`;
+    });
+    html += `<button class="btn btn-danger btn-block" id="deleteStudentBtn" style="margin-top:8px;">حذف هذا الطالب</button>
+    </div>`;
+
+    if(student.log && student.log.length){
+      html += `<div class="card"><h2>آخر التحديثات</h2>`;
+      student.log.slice().reverse().slice(0,12).forEach(l=>{
+        const critLabel = (CRITERIA.find(c=>c.key===l.key)||{}).label || l.key;
+        const sign = l.delta >= 0 ? '+' : '';
+        html += `<div class="log-item">${l.date} — ${critLabel}: ${sign}${l.delta}${l.note ? ' («'+escapeHtml(l.note)+'»)' : ''}</div>`;
+      });
+      html += `</div>`;
+    }
+  }
+
+  html += `<div class="card">
+    <h2>إعدادات المشرف</h2>
+    <div class="field">
+      <label>تغيير الرمز السري</label>
+      <div class="row">
+        <input type="password" id="newPin" placeholder="رمز جديد">
+        <button class="btn btn-outline" id="changePinBtn" style="flex:0 0 auto;">حفظ</button>
+      </div>
+    </div>
+    <button class="btn btn-outline btn-block" id="logoutBtn">تسجيل الخروج</button>
+  </div>`;
+
+  mainEl.innerHTML = html;
+  attachAdminHandlers(student);
+}
+
+function attachAdminHandlers(student){
+  document.getElementById('addStudentBtn').addEventListener('click', async ()=>{
+    const nameInput = document.getElementById('newStudentName');
+    const name = nameInput.value.trim();
+    if(!name){ showToast('يرجى إدخال اسم الطالب'); return; }
+    const newStu = {
+      id: uid(),
+      name,
+      points: {attendance:0, weeklyRequest:0, tuesdayWin:0, hospitality:0, behavior:0},
+      log: []
+    };
+    students.push(newStu);
+    selectedStudentAdminTab = newStu.id;
+    await saveAll();
+    showToast('تمت إضافة الطالب');
+    renderAdminView();
+  });
+
+  document.querySelectorAll('.stu-item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      selectedStudentAdminTab = el.getAttribute('data-id');
+      renderAdminView();
+    });
+  });
+
+  if(student){
+    document.querySelectorAll('[data-crit]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const key = btn.getAttribute('data-crit');
+        const input = document.getElementById('delta_' + key);
+        const val = parseInt(input.value, 10);
+        if(isNaN(val) || val === 0){ showToast('أدخل قيمة صحيحة'); return; }
+        student.points[key] = (student.points[key]||0) + val;
+        student.log = student.log || [];
+        student.log.push({
+          date: new Date().toLocaleDateString('ar-SA'),
+          key,
+          delta: val,
+          note: ''
+        });
+        await saveAll();
+        showToast('تم رصد النقاط');
+        renderAdminView();
+      });
+    });
+
+    document.getElementById('deleteStudentBtn').addEventListener('click', async ()=>{
+      if(!confirm('هل أنت متأكد من حذف هذا الطالب؟ لا يمكن التراجع.')) return;
+      students = students.filter(s=>s.id !== student.id);
+      selectedStudentAdminTab = null;
+      await saveAll();
+      showToast('تم حذف الطالب');
+      renderAdminView();
+    });
+  }
+
+  document.getElementById('changePinBtn').addEventListener('click', async ()=>{
+    const val = document.getElementById('newPin').value.trim();
+    if(!val){ showToast('أدخل رمزًا جديدًا'); return; }
+    settings.pin = val;
+    await saveAll();
+    showToast('تم تغيير الرمز السري');
+    renderAdminView();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    isAdminUnlocked = false;
+    renderAdminLock();
+  });
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ---------- TABS ---------- */
+document.getElementById('tabStudent').addEventListener('click', ()=>{
+  document.getElementById('tabStudent').classList.add('active');
+  document.getElementById('tabAdmin').classList.remove('active');
+  renderStudentView();
+});
+document.getElementById('tabAdmin').addEventListener('click', ()=>{
+  document.getElementById('tabAdmin').classList.add('active');
+  document.getElementById('tabStudent').classList.remove('active');
+  if(isAdminUnlocked) renderAdminView(); else renderAdminLock();
+});
+
+/* ---------- INIT ---------- */
+(async function init(){
+  if(!isConfigured){
+    configWarningEl.innerHTML = `<div class="config-warning">
+      ⚠️ لم يتم ربط الموقع بقاعدة بيانات بعد. افتح ملف الموقع وضع إعدادات Supabase الخاصة بك
+      في أعلى كود الجافاسكربت (القسم المشار إليه بالتعليق) حتى تُحفظ البيانات بشكل دائم.
+    </div>`;
+    mainEl.innerHTML = '';
+    renderStudentView();
+    return;
+  }
+  supabase = createClient(supabaseUrl, supabaseKey);
+  await loadData();
+  renderStudentView();
+})();
+</script>
+</body>
+</html>
